@@ -3,6 +3,15 @@ import configparser  # Library for reading configuration files
 import psycopg2  # Library for PostgreSQL database connection
 from sql_queries import copy_table_queries, insert_table_queries  # Custom SQL queries
 
+# Read the config
+config = configparser.ConfigParser()
+config.read('dwh.cfg')
+HOST          = config.get('CLUSTER', 'HOST')
+DB_NAME       = config.get('CLUSTER', 'DB_NAME')
+DB_USER       = config.get('CLUSTER', 'DB_USER')
+DB_PASSWORD   = config.get('CLUSTER', 'DB_PASSWORD')
+DB_PORT       = config.get('CLUSTER', 'DB_PORT')
+
 # Function to load data into staging tables
 def load_staging_tables(cur, conn):
     for table_name, query in copy_table_queries.items():
@@ -27,7 +36,7 @@ def main():
     config.read('dwh.cfg')
     
     # Establish a connection to the database using the configuration values
-    conn = psycopg2.connect("host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values()))
+    conn = psycopg2.connect(f"host={HOST} dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD} port={DB_PORT}")
     cur = conn.cursor()
     
     print('Loading staging tables...')  # Print status message
