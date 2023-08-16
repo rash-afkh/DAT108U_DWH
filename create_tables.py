@@ -4,13 +4,15 @@ from sql_queries import create_table_queries, drop_table_queries
 
 
 def drop_tables(cur, conn):
-    for query in drop_table_queries:
+    for table_name, query in drop_table_queries.items():
+        print(f"\tDropping {table_name} table")
         cur.execute(query)
         conn.commit()
 
 
 def create_tables(cur, conn):
-    for query in create_table_queries:
+    for table_name, query in create_table_queries.items():
+        print(f"\tCreating {table_name} table")
         cur.execute(query)
         conn.commit()
 
@@ -22,7 +24,10 @@ def main():
     conn = psycopg2.connect("host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values()))
     cur = conn.cursor()
 
+    print('Dropping tables ...')
     drop_tables(cur, conn)
+    
+    print('Creating tables ...')
     create_tables(cur, conn)
 
     conn.close()
