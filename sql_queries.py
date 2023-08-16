@@ -1,7 +1,7 @@
-import configparser
+# Import necessary library
+import configparser  # Library for reading configuration files
 
-
-# CONFIG
+# Read the configuration from 'dwh.cfg' file
 config = configparser.ConfigParser()
 config.read('dwh.cfg')
 
@@ -221,24 +221,39 @@ time_table_insert = ("""
 
 # QUERY LISTS
 
-create_table_queries = {'staging events': staging_events_table_create, 
-                        'staging songs': staging_songs_table_create, 
-                        'user': user_table_create, 
-                        'artist': artist_table_create, 
-                        'time': time_table_create, 
-                        'song': song_table_create, 
-                        'songplay': songplay_table_create}
-drop_table_queries = {'staging events': staging_events_table_drop, 
-                      'staging songs': staging_songs_table_drop, 
-                      'songplay': songplay_table_drop, 
-                      'user': user_table_drop, 
-                      'song': song_table_drop, 
-                      'artist': artist_table_drop, 
-                      'time': time_table_drop}
-copy_table_queries = {'stating events': staging_events_copy, 
-                      'staging songs': staging_songs_copy}
-insert_table_queries ={'songsplay':songplay_table_insert, 
-                       'user':user_table_insert, 
-                       'song': song_table_insert, 
-                       'artist': artist_table_insert, 
-                       'time': time_table_insert}
+# Dictionary containing SQL statements for creating tables
+create_table_queries = {
+    'staging events':   staging_events_table_create,
+    'staging songs':    staging_songs_table_create,
+    'user':             user_table_create,
+    'artist':           artist_table_create,
+    'time':             time_table_create,
+    'song':             song_table_create,
+    'songplay':         songplay_table_create
+}
+
+# Dictionary containing SQL statements for dropping tables
+drop_table_queries = {
+    'staging events':   staging_events_table_drop,
+    'staging songs':    staging_songs_table_drop,
+    'songplay':         songplay_table_drop,
+    'user':             user_table_drop,
+    'song':             song_table_drop,
+    'artist':           artist_table_drop,
+    'time':             time_table_drop
+}
+
+# Dictionary containing SQL statements for copying data into staging tables
+copy_table_queries = {
+    'staging events':   staging_events_copy,
+    'staging songs':    staging_songs_copy
+}
+
+# Dictionary containing SQL statements for inserting data into analytical tables
+insert_table_queries = {
+    'songplay':     songplay_table_insert,
+    'user':         user_table_insert,
+    'song':         song_table_insert,
+    'artist':       artist_table_insert,
+    'time':         time_table_insert
+}
