@@ -3,6 +3,15 @@ import configparser
 import psycopg2
 from sql_queries import create_table_queries, drop_table_queries
 
+# Read the config
+config = configparser.ConfigParser()
+config.read('dwh.cfg')
+HOST          = config.get('CLUSTER', 'HOST')
+DB_NAME       = config.get('CLUSTER', 'DB_NAME')
+DB_USER       = config.get('CLUSTER', 'DB_USER')
+DB_PASSWORD   = config.get('CLUSTER', 'DB_PASSWORD')
+DB_PORT       = config.get('CLUSTER', 'DB_PORT')
+
 # function to drop all tables
 def drop_tables(cur, conn):
     for table_name, query in drop_table_queries.items():
@@ -24,7 +33,7 @@ def main():
     config.read('dwh.cfg')  # read the configuration file
     
     # establish connection to the database using the configuration values
-    conn = psycopg2.connect("host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values()))
+    conn = psycopg2.connect(f"host={HOST} dbname={DB_NAME} user={DB_USER} password={DB_PASSWORD} port={DB_PORT}")
     cur = conn.cursor()
 
     print('Dropping tables ...')  # print a message about dropping tables

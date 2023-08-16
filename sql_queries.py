@@ -4,6 +4,11 @@ import configparser  # Library for reading configuration files
 # Read the configuration from 'dwh.cfg' file
 config = configparser.ConfigParser()
 config.read('dwh.cfg')
+ARN             = config.get('IAM_ROLE', 'ARN')
+LOG_DATA        = config.get('S3', 'LOG_DATA')
+LOG_JSONPATH    = config.get('S3', 'LOG_JSONPATH')
+SONG_DATA       = config.get('S3', 'SONG_DATA')
+SONGS_JSONPATH  = config.get('S3', 'SONGS_JSONPATH')
 
 # DROP TABLES
 
@@ -92,11 +97,11 @@ song_table_create = ("""
 
 artist_table_create = ("""
     CREATE TABLE "artists" (
-    artist_id   VARCHAR(25)     NOT NULL SORTKEY    PRIMARY KEY, 
+    artist_id   VARCHAR(50)     NOT NULL SORTKEY    PRIMARY KEY, 
     name        VARCHAR(100)    NULL, 
-    location    VARCHAR(35)     NULL, 
-    latitude    DECIMAL(9)      NULL, 
-    longitude   DECIMAL(9)      NULL 
+    location    VARCHAR(50)     NULL, 
+    latitude    DECIMAL(15)     NULL, 
+    longitude   DECIMAL(15)     NULL 
     ); 
 """)
 
@@ -120,7 +125,7 @@ staging_events_copy = ("""
     STATUPDATE      ON
     FORMAT AS JSON  '{}'                   
     REGION          'us-west-2';
-""").format(config["S3"]['LOG_DATA'], config["IAM_ROLE"]['ARN'], config["S3"]['LOG_JSONPATH'])
+""").format(LOG_DATA, ARN, LOG_JSONPATH)
 
 staging_songs_copy = ("""
     copy                staging_songs 
@@ -130,7 +135,7 @@ staging_songs_copy = ("""
     ACCEPTINVCHARS AS   '^'
     STATUPDATE          ON
     REGION              'us-west-2';
-""").format(config["S3"]['SONG_DATA'], config["IAM_ROLE"]['ARN'])
+""").format(SONG_DATA, ARN)
 
 # FINAL TABLES
 
